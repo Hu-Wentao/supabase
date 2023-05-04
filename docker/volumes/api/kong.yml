@@ -6,10 +6,10 @@ _format_version: '1.1'
 consumers:
   - username: anon
     keyauth_credentials:
-      - key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      - key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjgzMTI5NjAwLAogICAgImV4cCI6IDE4NDA5ODI0MDAKfQ.oofsX11U0PfsnCv5drzLKezEw51vfOQtQ2KN-ZHeI5Y
   - username: service_role
     keyauth_credentials:
-      - key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      - key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2ODMxMjk2MDAsCiAgICAiZXhwIjogMTg0MDk4MjQwMAp9.UeAjW7Ez8e3-1lPvGIb8KR4ccMLwrY_NBfW7rkoYhvk
 
 ###
 ### Access Control List
@@ -26,7 +26,7 @@ acls:
 services:
   ## Open Auth routes
   - name: auth-v1-open
-    url: http://auth:9999/verify
+    url: http://auth:5999/verify
     routes:
       - name: auth-v1-open
         strip_path: true
@@ -35,7 +35,7 @@ services:
     plugins:
       - name: cors
   - name: auth-v1-open-callback
-    url: http://auth:9999/callback
+    url: http://auth:5999/callback
     routes:
       - name: auth-v1-open-callback
         strip_path: true
@@ -44,7 +44,7 @@ services:
     plugins:
       - name: cors
   - name: auth-v1-open-authorize
-    url: http://auth:9999/authorize
+    url: http://auth:5999/authorize
     routes:
       - name: auth-v1-open-authorize
         strip_path: true
@@ -55,8 +55,8 @@ services:
 
   ## Secure Auth routes
   - name: auth-v1
-    _comment: 'GoTrue: /auth/v1/* -> http://auth:9999/*'
-    url: http://auth:9999/
+    _comment: 'GoTrue: /auth/v1/* -> http://auth:5999/*'
+    url: http://auth:5999/
     routes:
       - name: auth-v1-all
         strip_path: true
@@ -76,8 +76,8 @@ services:
 
   ## Secure REST routes
   - name: rest-v1
-    _comment: 'PostgREST: /rest/v1/* -> http://rest:3000/*'
-    url: http://rest:3000/
+    _comment: 'PostgREST: /rest/v1/* -> http://rest:53000/*'
+    url: http://rest:53000/
     routes:
       - name: rest-v1-all
         strip_path: true
@@ -97,8 +97,8 @@ services:
 
   ## Secure GraphQL routes
   - name: graphql-v1
-    _comment: 'PostgREST: /graphql/v1/* -> http://rest:3000/rpc/graphql'
-    url: http://rest:3000/rpc/graphql
+    _comment: 'PostgREST: /graphql/v1/* -> http://rest:53000/rpc/graphql'
+    url: http://rest:53000/rpc/graphql
     routes:
       - name: graphql-v1-all
         strip_path: true
@@ -123,8 +123,8 @@ services:
 
   ## Secure Realtime routes
   - name: realtime-v1
-    _comment: 'Realtime: /realtime/v1/* -> ws://realtime:4000/socket/*'
-    url: http://realtime-dev.supabase-realtime:4000/socket/
+    _comment: 'Realtime: /realtime/v1/* -> ws://realtime:54000/socket/*'
+    url: http://realtime-dev.supabase-realtime:54000/socket/
     routes:
       - name: realtime-v1-all
         strip_path: true
@@ -155,8 +155,8 @@ services:
       - name: cors
   ## Analytics routes
   - name: analytics-v1
-    _comment: 'Analytics: /analytics/v1/* -> http://logflare:4000/*'
-    url: http://analytics:4000/
+    _comment: 'Analytics: /analytics/v1/* -> http://logflare:54000/*'
+    url: http://analytics:54000/
     routes:
       - name: analytics-v1-all
         strip_path: true
@@ -164,8 +164,8 @@ services:
           - /analytics/v1/
   ## Secure Database routes
   - name: meta
-    _comment: 'pg-meta: /pg/* -> http://pg-meta:8080/*'
-    url: http://meta:8080/
+    _comment: 'pg-meta: /pg/* -> http://pg-meta:58080/*'
+    url: http://meta:58080/
     routes:
       - name: meta-all
         strip_path: true

@@ -17,21 +17,21 @@ services:
           "CMD",
           "node",
           "-e",
-          "require('http').get('http://localhost:3000/api/profile', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+          "require('http').get('http://localhost:53000/api/profile', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
         ]
       timeout: 5s
       interval: 5s
       retries: 3
     ports:
-      - ${STUDIO_PORT}:3000/tcp
+      - ${STUDIO_PORT}:53000/tcp
     environment:
-      STUDIO_PG_META_URL: http://meta:8080
+      STUDIO_PG_META_URL: http://meta:58080
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
       DEFAULT_ORGANIZATION_NAME: ${STUDIO_DEFAULT_ORGANIZATION}
       DEFAULT_PROJECT_NAME: ${STUDIO_DEFAULT_PROJECT}
 
-      SUPABASE_URL: http://kong:8000
+      SUPABASE_URL: http://kong:58000
       SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
@@ -41,8 +41,8 @@ services:
     image: kong:2.8.1
     restart: unless-stopped
     ports:
-      - ${KONG_HTTP_PORT}:8000/tcp
-      - ${KONG_HTTPS_PORT}:8443/tcp
+      - ${KONG_HTTP_PORT}:58000/tcp
+      - ${KONG_HTTPS_PORT}:58443/tcp
     environment:
       KONG_DATABASE: "off"
       KONG_DECLARATIVE_CONFIG: /var/lib/kong/kong.yml
@@ -70,7 +70,7 @@ services:
           "--no-verbose",
           "--tries=1",
           "--spider",
-          "http://localhost:9999/health"
+          "http://localhost:59999/health"
         ]
       timeout: 5s
       interval: 5s
@@ -78,7 +78,7 @@ services:
     restart: unless-stopped
     environment:
       GOTRUE_API_HOST: 0.0.0.0
-      GOTRUE_API_PORT: 9999
+      GOTRUE_API_PORT: 59999
       API_EXTERNAL_URL: ${API_EXTERNAL_URL}
 
       GOTRUE_DB_DRIVER: postgres
@@ -141,14 +141,14 @@ services:
           "CMD",
           "bash",
           "-c",
-          "printf \\0 > /dev/tcp/localhost/4000"
+          "printf \\0 > /dev/tcp/localhost/54000"
         ]
       timeout: 5s
       interval: 5s
       retries: 3
     restart: unless-stopped
     environment:
-      PORT: 4000
+      PORT: 54000
       DB_HOST: ${POSTGRES_HOST}
       DB_PORT: ${POSTGRES_PORT}
       DB_USER: supabase_admin
@@ -185,7 +185,7 @@ services:
           "--no-verbose",
           "--tries=1",
           "--spider",
-          "http://localhost:5000/status"
+          "http://localhost:55000/status"
         ]
       timeout: 5s
       interval: 5s
@@ -194,7 +194,7 @@ services:
     environment:
       ANON_KEY: ${ANON_KEY}
       SERVICE_KEY: ${SERVICE_ROLE_KEY}
-      POSTGREST_URL: http://rest:3000
+      POSTGREST_URL: http://rest:53000
       PGRST_JWT_SECRET: ${JWT_SECRET}
       DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       FILE_SIZE_LIMIT: 52428800
@@ -205,7 +205,7 @@ services:
       REGION: stub
       GLOBAL_S3_BUCKET: stub
       ENABLE_IMAGE_TRANSFORMATION: "true"
-      IMGPROXY_URL: http://imgproxy:5001
+      IMGPROXY_URL: http://imgproxy:55001
     volumes:
       - ./volumes/storage:/var/lib/storage:z
 
@@ -218,7 +218,7 @@ services:
       interval: 5s
       retries: 3
     environment:
-      IMGPROXY_BIND: ":5001"
+      IMGPROXY_BIND: ":55001"
       IMGPROXY_LOCAL_FILESYSTEM_ROOT: /
       IMGPROXY_USE_ETAG: "true"
       IMGPROXY_ENABLE_WEBP_DETECTION: ${IMGPROXY_ENABLE_WEBP_DETECTION}
@@ -234,7 +234,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     environment:
-      PG_META_PORT: 8080
+      PG_META_PORT: 58080
       PG_META_DB_HOST: ${POSTGRES_HOST}
       PG_META_DB_PORT: ${POSTGRES_PORT}
       PG_META_DB_NAME: ${POSTGRES_DB}
@@ -247,13 +247,13 @@ services:
     restart: unless-stopped
     environment:
       JWT_SECRET: ${JWT_SECRET}
-      SUPABASE_URL: http://kong:8000"
+      SUPABASE_URL: http://kong:58000"
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
       SUPABASE_DB_URL: postgresql://postgres:${POSTGRES_PASSWORD}@{POSTGRES_DB}:${POSTGRES_PORT}/${POSTGRES_DB}"
       VERIFY_JWT: "false"
     ports:
-      - ${FUNCTIONS_HTTP_PORT}:9000/tcp
+      - ${FUNCTIONS_HTTP_PORT}:59000/tcp
     volumes:
       - ./volumes/functions:/home/deno/functions:Z
     command:
